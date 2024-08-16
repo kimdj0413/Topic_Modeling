@@ -37,6 +37,8 @@ print('trigram 다섯개만 출력 :',candidates[:5])
 model = SentenceTransformer('sentence-transformers/xlm-r-100langs-bert-base-nli-stsb-mean-tokens')
 doc_embedding = model.encode([doc])
 candidate_embeddings = model.encode(candidates)
+print(f'doc_embedding : {doc_embedding}')
+print(f'\ncandidate_embedding : {candidate_embeddings}')
 
 ##    상위 5개 출력
 top_n = 5
@@ -53,6 +55,7 @@ def mmr(doc_embedding, candidate_embeddings, words, top_n, diversity):
 
     # 각 키워드들 간의 유사도
     word_similarity = cosine_similarity(candidate_embeddings)
+    print(f'word_similarity : {len(word_similarity)}')
 
     # 문서와 가장 높은 유사도를 가진 키워드의 인덱스를 추출.
     # 만약, 2번 문서가 가장 유사도가 높았다면
