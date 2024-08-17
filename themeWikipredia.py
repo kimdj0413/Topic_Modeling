@@ -28,10 +28,10 @@ for query in query_list:
   response = requests.get(url, headers=headers)
   soup = BeautifulSoup(response.text, 'html.parser')
   elements = soup.find_all(class_='mw-content-ltr mw-parser-output')
-
+  text = ""
   for element in elements:
     text = element.get_text()
-  try:
+  if len(text) > 100:
     text = text.split("같이 보기")[0]
 
     okt = Okt()
@@ -47,7 +47,7 @@ for query in query_list:
     with open(f'./embeddings/{query}_embedding.pkl', 'wb') as f:
         pickle.dump(text_embedding, f)
     print(text_embedding)
-  except NameError as e:
+  else:
     error_list.append(query)
-    print(f"오류 발생: {e}. 다음 쿼리로 넘어갑니다.")
+    print(f"'{query}' 오류 발생: 다음 쿼리로 넘어갑니다.")
 print(error_list)
