@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
-import requests
-from bs4 import BeautifulSoup
-import re
-from collections import defaultdict
+# import requests
+# from bs4 import BeautifulSoup
+# import re
+# from collections import defaultdict
 import pickle
 from konlpy.tag import Okt
 from sentence_transformers import SentenceTransformer
+import os
 
 # with open('theme_dict.pkl', 'rb') as f:
 #     loaded_dict = pickle.load(f)
@@ -14,12 +15,12 @@ from sentence_transformers import SentenceTransformer
 # print(keys)
 
 # User-Agent 설정
-headers = {
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    'Accept-Language': 'ko-KR,ko;q=0.9',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Connection': 'keep-alive'
-}
+# headers = {
+#     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+#     'Accept-Language': 'ko-KR,ko;q=0.9',
+#     'Accept-Encoding': 'gzip, deflate, br',
+#     'Connection': 'keep-alive'
+# }
 
 # print(f"********************  {query}  ********************")
 # url = f'https://ko.wikipedia.org/wiki/{query}'
@@ -39,12 +40,27 @@ headers = {
 
 # print(text)
 
-title ="코로나19(음압병실/음압구급차)"
+title ="수산"
 text = """
-음압병상은 기압 차를 이용해 병실 내부의 공기가 외부로 빠져나가지 못하도록 해, 병원균과 바이러스를 차단하는 기능을 하는 병실이다. 즉 기압 차로 인해 병실 밖의 공기는 들어오지만 병실 안의 공기는 밖으로 나가지 못하도록 설계된 공간이다. 특히 환자의 호흡 등으로 배출된 바이러스가 섞인 공기가 밖으로 나가지 않고 천장 정화 시설로 흐르도록 돼 있다. 따라서 내부 오염원이 정화시설을 통해 걸러지면서 바이러스의 외부 유출이 방지되는 것이다. 
+"수산"이라는 용어는 일반적으로 수산업, 즉 어업과 해양 생물 자원을 다루는 산업을 의미합니다. 수산업은 어획, 양식, 해양 생물의 가공 및 유통 등을 포함하며, 인간의 식량 공급과 경제 활동에 중요한 역할을 합니다. 아래에서 수산업의 주요 개념, 종류, 특징 및 현재 동향에 대해 설명하겠습니다.
 
-음압병상은 환자를 외부 및 일반 환자들과 분리해 수용·치료하기 위한 특수 격리 병실로, 감염병 확산을 막기 위한 필수시설이다. 음압병실은 크게 전실과 환자가 입원하는 병실 등 2개의 공간으로 구성되는데, 의료진은 전실에서 손 소독과 방호복 착용 뒤 병실로 들어가게 된다. 병실은 중증 환자를 치료할 수 있도록 설계돼 있으며, 감염병 환자와 병원 직원의 동선을 분리하기 위해 출입문은 따로 설치된다.
-음파에 의해 생긴 압력의 변화량. 이론적으로 음파의 세기(강도)를 나타내는 양(量)의 하나로, 음파에 의해 생긴 미소 출력의 변화를 말한다. 음파의 세기를 나타내는 다른 양으로 입자 속도가 있다. 음향학에서는 단위 면적을 단위 시간에 흐르는 에너지를 음의 세기라 한다.
+1. 수산업의 주요 개념
+어업: 바다나 강, 호수에서 물고기 및 기타 해양 생물을 잡는 활동입니다.
+양식: 인공적으로 물고기, 조개, 갑각류 등을 기르는 활동으로, 자연 생태계에서의 자원 고갈을 방지하는 데 기여합니다.
+수산물 가공: 잡은 해양 생물을 가공하여 소비자에게 판매하는 과정으로, 신선한 상태에서 냉동, 건조, 통조림 등 다양한 형태로 가공됩니다.
+2. 수산업의 종류
+상업 어업: 대규모로 해양 생물을 잡아 판매하는 어업 형태로, 산업적으로 운영됩니다.
+소형 어업: 지역 주민들이 생계를 위해 소규모로 어획하는 형태입니다.
+양식업: 해양, 담수에서 인공적으로 생물을 기르는 산업으로, 다양한 품종의 생물을 양식할 수 있습니다.
+3. 특징
+자원 관리: 지속 가능한 수산업을 위해 어획량과 생태계를 관리하는 것이 중요합니다.
+기후 변화의 영향: 해양 생물은 기후 변화에 민감하여, 수산업도 이에 따라 영향을 받을 수 있습니다.
+수출 산업: 수산물은 많은 국가에서 중요한 수출 품목으로, 경제적 가치가 큽니다.
+4. 현재 동향
+지속 가능성: 환경 보호와 지속 가능한 자원 관리를 위한 노력이 증가하고 있으며, 친환경 양식과 어업 방식이 주목받고 있습니다.
+기술 발전: 자동화, AI, 데이터 분석 등을 활용한 스마트 어업 기술이 발전하고 있습니다.
+해양 생태계 보호: 오염, 남획 등으로 인한 해양 생태계 파괴를 방지하기 위한 정책과 국제 협력이 필요합니다.
+수산업은 인류의 중요한 식량 자원과 경제적 기반을 제공하는 분야로, 지속 가능한 발전과 환경 보호를 위해 다양한 노력이 필요합니다.
 """
 okt = Okt()
 nouns = okt.nouns(text)
@@ -54,6 +70,7 @@ print(text)
 model = SentenceTransformer('sentence-transformers/xlm-r-100langs-bert-base-nli-stsb-mean-tokens')
 text_embedding = model.encode([text])
 
+print(text_embedding)
+
 with open(f'C:/Topic_Modeling/embeddings/{title}_embedding.pkl', 'wb') as f:
     pickle.dump(text_embedding, f)
-print(text_embedding)
